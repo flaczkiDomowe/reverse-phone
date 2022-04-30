@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Model\Interfaces\Interfaces;
+namespace App\Model\Interfaces;
 
 interface CanManipulateKeys
 {

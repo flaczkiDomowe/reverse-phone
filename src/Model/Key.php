@@ -2,8 +2,11 @@
 
 namespace App\Model;
 
-abstract class Key
+use App\Model\Interfaces\Pressable;
+
+abstract class Key implements Pressable
 {
+    public const KEY_ARRAY_OFFSET=-1;
     private $keyIdentifier;
     public function __construct(string $keyIdentifier)
     {
