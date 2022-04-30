@@ -8,7 +8,7 @@ use App\Entity\LetterKey;
 use App\Entity\RulingKey;
 use App\Entity\SpecialCharactersKey;
 
-class Phone extends Device
+class Phone
 {
     /**
      * @var array

@@ -3,6 +3,9 @@
 
 
 use App\Kernel;
+use App\Model\InverseKeyboard;
+use App\Model\Phone;
+use App\Model\StandardKeyboard;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 
 if (!is_file(dirname(__DIR__).'/vendor/autoload_runtime.php')) {
@@ -13,6 +16,8 @@ require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
 
 return function (array $context) {
     $kernel = new Kernel($context['APP_ENV'], (bool) $context['APP_DEBUG']);
-
-    return new Application($kernel);
+    $app=new Application($kernel);
+    $app->add(new InverseKeyboard(new Phone()));
+    $app->add(new StandardKeyboard(new Phone()));
+    return $app;
 };

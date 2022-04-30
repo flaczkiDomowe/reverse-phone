@@ -3,22 +3,36 @@
 namespace App\Model;
 
 use App\Model\Interfaces\CanContainCharacters;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
-class StandardKeyboard extends Program
+
+class StandardKeyboard extends Command
 {
     private $phone;
-    private $inputCode;
     private $outputSentence;
     private $phoneKeys;
 
 
-    public function execute()
+    protected function configure()
     {
-        // TODO: Implement execute() method.
+        $this->setName('phone-keyboard-decoder')
+            ->setDescription('Changes telephone keyboard button clicks combination to input sentence')
+            ->addArgument('combination', InputArgument::REQUIRED, 'Pass combination');
+    }
+
+    protected function execute(InputInterface $input, OutputInterface $output):int
+    {
+        $this->makeSentenceFromCode($input->getArgument('combination'));
+        $output->writeln(sprintf('Sentence: %s',$this->outputSentence ));
+        return 1;
     }
 
     public function __construct(Phone $phone)
     {
+        parent::__construct();
         $this->phone=$phone;
         $this->phoneKeys=$phone->getKeys();
     }

@@ -7,22 +7,36 @@ use App\Entity\RulingKey;
 
 use App\Model\Interfaces\CanContainCharacters;
 use InvalidArgumentException;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
-class InverseKeyboard extends Program
+
+class InverseKeyboard extends Command
 {
     private $phone;
-    private $inputSentence;
     private $outputCode;
 
 
     public function __construct(Phone $phone)
     {
+        parent::__construct();
         $this->phone = $phone;
     }
 
-    public function execute()
+    protected function configure()
     {
+        $this->setName('phone-keyboard-coder')
+            ->setDescription('Changes input sentence to telephone keyboard button clicks combination')
+            ->addArgument('sentence', InputArgument::REQUIRED, 'Pass sentence');
+    }
 
+    protected function execute(InputInterface $input, OutputInterface $output):int
+    {
+        $this->makeCodeFromString($input->getArgument('sentence'));
+        $output->writeln(sprintf('Combination: %s',$this->outputCode ));
+              return 1;
     }
 
     public function makeCodeFromString(string $string)
@@ -59,9 +73,7 @@ class InverseKeyboard extends Program
             } else {
                 /** @var RulingKey $rulingKey */
                 $rulingKey = $this->phone->getRulingKeys()['caseChange'];
-                var_dump($key);
                 $code = $rulingKey->press($char,self::class);
-                var_dump($key);
                 $code.=$key->press($char,self::class);
             }
         } else {
